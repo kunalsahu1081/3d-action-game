@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import { TechnicolorShader } from 'three/examples/jsm/Addons.js';
 
 
 export class Terrain extends THREE.Mesh {
@@ -15,22 +16,41 @@ export class Terrain extends THREE.Mesh {
         this.createTerrian();
         
    
-        this.rotation.x = -1 * Math.PI / 2;
+        // this.rotation.x = -1 * Math.PI / 2;
 
         this.createTrees();
     }
 
     createTerrian() {
 
-        this.geometry?.dispose();
+        const terrainGeometry = new THREE.PlaneGeometry(this.terrain_width, this.terrain_height);
 
         const terrainMaterial = new THREE.MeshStandardMaterial({color: '#43a30f'});
 
-        const terrainGeometry = new THREE.PlaneGeometry(this.terrain_width, this.terrain_height);
 
-        const terrainMesh = new THREE.Mesh(terrainGeometry, terrainMaterial);
+        if (this.terrain) {
 
-        terrainMesh.rotate
+            console.log(this.terrain_width, this.terrain_height)
+
+            this.terrain.geometry.dispose();
+            this.terrain.material.dispose();
+
+            // this.terrain = null;
+
+            this.terrain = new THREE.Mesh(terrainGeometry, terrainMaterial);
+
+
+            return;
+        }
+
+        
+
+
+        this.terrain = new THREE.Mesh(terrainGeometry, terrainMaterial);
+
+        // this.terrain.rotation.x = -1 * Math.PI / 2;
+
+        this.add(this.terrain);
         
 
         // this.position.set(this.width / 2, 0, this.height / 2);
@@ -42,23 +62,26 @@ export class Terrain extends THREE.Mesh {
         const treeRadius = 0.2;
         const treeHeight = 1;
 
+        const treeGeometry  = new THREE.ConeGeometry(treeRadius, treeHeight, 8);
+        const treeMaterial = new THREE.MeshStandardMaterial({
+            color: '#e91e63',
+            flatShading: true,
+        });
+
+        const trees = new THREE.Group();
+
         for (let i = 0; i < this.treeCount; i++) {
 
-            console.log('hereadsf asdf')
-
-            const treeGeometry  = new THREE.ConeGeometry(treeRadius, treeHeight, 8);
-            const treeMaterial = new THREE.MeshStandardMaterial({
-                color: '#0c3706',
-                flatShading: true,
-            });
-
             const treeMesh = new THREE.Mesh(treeGeometry, treeMaterial);
+    
             treeMesh.rotation.x = Math.PI / 2;
 
-            treeMesh.position.z = treeHeight / 2;
+            treeMesh.position.set(Math.random() * (this.terrain_width / 2) ,Math.random() * (this.terrain_height / 2) , treeHeight / 2 );
 
             this.add(treeMesh);
+
         }
+
 
     }
 

@@ -50,12 +50,12 @@ window.addEventListener('resize' , () => {
 
 const folder = gui.addFolder('Terrain');
 
-folder.add(terrain, 'width', 1, 20, 1).name('Width');
+folder.add(terrain, 'terrain_width', 1, 20, 1).name('Width');
 
-folder.add(terrain, 'height', 1, 20, 1).name('Height');
+folder.add(terrain, 'terrain_height', 1, 20, 1).name('Height');
 
-folder.addColor(terrain.material, 'color');
+folder.addColor(terrain.terrain.material, 'color');
 
 folder.onChange(() => {
-    terrain.createGeometry();
+    terrain.createTerrian();
 })
