@@ -2,7 +2,7 @@ import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import Stats from 'three/addons/libs/stats.module.js'
 import {GUI} from 'three/addons/libs/lil-gui.module.min.js'
-import { Terrain } from './terrain';
+import { World } from './world';
 
 const gui = new GUI();
 const stats = new Stats()
@@ -14,21 +14,21 @@ renderer.setAnimationLoop( animate );
 document.body.appendChild( renderer.domElement );
 
 const scene = new THREE.Scene();
-const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
+const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight,1 , 1010);
 const controls = new OrbitControls( camera, renderer.domElement );
 
-const terrain = new Terrain(10, 10);
-scene.add(terrain);
+const world = new World(18, 18);
+scene.add(world);
 
 const sun = new THREE.DirectionalLight();
-sun.position.set(1, 2, 3);
+sun.position.set(10, 10, 10);
 scene.add(sun);
 
 const ambient = new THREE.AmbientLight();
-ambient.intensity = 1;
+ambient.intensity = 2;
 scene.add(ambient);
 
-camera.position.set(10, 2, 10);
+camera.position.set(20, 0, 0);
 controls.update();
 
 function animate() {
@@ -48,14 +48,33 @@ window.addEventListener('resize' , () => {
 })
 
 
-const folder = gui.addFolder('Terrain');
+const worldFolder = gui.addFolder('world');
 
-folder.add(terrain, 'terrain_width', 1, 20, 1).name('Width');
+worldFolder.add(world, 'terrain_width', 1, 20, 1).name('Width');
 
-folder.add(terrain, 'terrain_height', 1, 20, 1).name('Height');
+worldFolder.add(world, 'terrain_height', 1, 20, 1).name('Height');
 
-folder.addColor(terrain.terrain.material, 'color');
+worldFolder.addColor(world.terrain.material, 'color');
 
-folder.onChange(() => {
-    terrain.createTerrian();
+
+document.addEventListener('keydown', (ev) => {
+
+    console.log(ev.key);
+
+    if (ev.key == 'ArrowUp') {
+        world.moveCharacter(0, 1);
+    } else if (ev.key == 'ArrowDown') {
+        world.moveCharacter(0, -1);
+    } else if (ev.key == 'ArrowLeft') {
+        world.moveCharacter(1, 0);
+    } else if (ev.key == 'ArrowRight') {
+        world.moveCharacter(-1, 0);
+    }
+
+    // world.moveCharacter()
+})
+
+worldFolder.onChange(() => {
+    world.createTerrian();
+    world.generateBorders();
 })
