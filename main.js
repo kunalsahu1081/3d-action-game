@@ -59,8 +59,6 @@ worldFolder.addColor(world.terrain.material, 'color');
 
 document.addEventListener('keydown', (ev) => {
 
-    console.log(ev.key);
-
     if (ev.key == 'ArrowUp') {
         world.moveCharacter(0, 1);
     } else if (ev.key == 'ArrowDown') {

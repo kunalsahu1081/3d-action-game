@@ -14,8 +14,8 @@ export class World extends THREE.Mesh {
         this.rockCount = 10;
         this.bushCount = 10;
 
-        this.character_x_position = 0.5;
-        this.character_y_position = 0.5;
+        this.character_x_position = -1 * this.terrain_width / 2 + 1.5;
+        this.character_y_position = this.terrain_width / 2 - 1.5;
 
 
         this.createTerrian();
@@ -35,6 +35,11 @@ export class World extends THREE.Mesh {
             this.remove(this.terrain);
         }
 
+
+        const framebox = new THREE.BoxGeometry(1, 1);
+
+
+
         const terrainGeometry = new THREE.PlaneGeometry(this.terrain_width, this.terrain_height, this.terrain_width, this.terrain_height);
         const terrainMaterial = new THREE.MeshStandardMaterial({color: 'green', wireframe: true});
         this.terrain = new THREE.Mesh(terrainGeometry, terrainMaterial);
@@ -42,6 +47,7 @@ export class World extends THREE.Mesh {
         this.terrain.rotation.y = Math.PI / 2;
         this.terrain.position.set(0, 0 , 0);
         this.add(this.terrain);
+
 
     }
 
@@ -372,40 +378,39 @@ export class World extends THREE.Mesh {
 
         const character_color = '#60bfd7';
 
-        const verticesOfCharacter = [
-            
-            0, -0.5, -0.5,         0, 0.5, -0.5,
-            0, 0.5, 0.5,         0, -0.5, 0.5,
-
-            1,-0.2,-0.2,        1, 0.2,-0.2,
-            1, 0.2, 0.2,        1, -0.2, 0.2
+        const verticesOfCube = [
+            -1,-1,-1,    1,-1,-1,    1, 1,-1,    -1, 1,-1,
+            -1,-1, 1,    1,-1, 1,    1, 1, 1,    -1, 1, 1,
         ];
         
         const indicesOfFaces = [
-            0, 1, 2, 0, 2, 3,
-
-            4, 5, 6,  4, 6, 7,
-
-            0, 1, 5, 0, 5, 4,
-
-            1, 2, 6, 1, 6, 5,
-
-            3, 0, 4, 3, 4, 7,
-
-            2, 3, 7, 2, 7, 6
+            0, 3, 1, 3, 7, 1, 7, 5, 1, 5, 7, 4, 5, 0, 1, 4, 0, 5 
+               
         ];
 
-        const geometry = new THREE.PolyhedronGeometry( verticesOfCharacter, indicesOfFaces, 0.7, 0 );
+        this.character = new THREE.Group();
 
-        const material = new THREE.MeshStandardMaterial( {color: character_color} ); 
+        this.add(this.character);
+
+        const geometry = new THREE.PolyhedronGeometry( verticesOfCube, indicesOfFaces, 0.8, 0 );
+
+        const material = new THREE.MeshStandardMaterial( {color: character_color, } ); 
 
         const mesh = new THREE.Mesh(geometry, material);
 
-        mesh.position.set(0, this.character_y_position, this.character_y_position);
+        mesh.position.set( 0, -1 * this.terrain_width / 2 + 1.5, this.terrain_width / 2 - 1.5 );
 
-        this.character = mesh;
+        this.character.add(mesh);
 
-        this.add(this.character);
+        const tgeometry = new THREE.TorusGeometry( 0.2, 0.04, 16, 100 ); 
+        const tmaterial = new THREE.MeshBasicMaterial( { color: '#c82d80' } ); 
+        const torus = new THREE.Mesh( tgeometry, tmaterial );
+
+        torus.position.set(0, -1 * this.terrain_width / 2 + 1.5, this.terrain_width / 2 - 1.5 );
+        torus.rotateY(Math.PI / 2);
+        torus.rotateX(3 * Math.PI / 4);
+
+        this.character.add(torus);
 
 
     }
