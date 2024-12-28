@@ -435,5 +435,32 @@ export class World extends THREE.Mesh {
 
     }
 
+    turnCharacter(directionn) {
+
+
+        if (directionn === 'l') {
+            this.character.children[0].rotation.set(Math.PI / 2, 0, 0);
+            this.character.children[1].rotation.set(0, -3 * Math.PI / 4, 0);
+        }
+
+        if (directionn === 'u') {
+            this.character.children[0].rotation.set(0, 0, 0)
+            this.character.children[1].rotation.set(0, Math.PI / 2, 0);
+            this.character.children[1].rotateX(3 * Math.PI / 4);
+        }
+
+        if (directionn === 'r') {
+            this.character.children[0].rotation.set(-Math.PI / 2, 0, 0)
+            this.character.children[1].rotation.set(0, 3 * Math.PI / 4, 0);
+        }
+
+        if (directionn === 'd') {
+            this.character.children[0].rotation.set(Math.PI, 0, 0)
+            this.character.children[1].rotation.set(0, Math.PI / 2, 0);
+            this.character.children[1].rotateX(-3 * Math.PI / 4);
+        }
+
+    }
+
 
 }

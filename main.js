@@ -69,6 +69,19 @@ document.addEventListener('keydown', (ev) => {
         world.moveCharacter(-1, 0);
     }
 
+    if (ev.key == 'l') {
+        world.turnCharacter('l');
+    }
+    if (ev.key == 'r') {
+        world.turnCharacter('r');
+    }
+    if (ev.key == 'u') {
+        world.turnCharacter('u');
+    }
+    if (ev.key == 'd') {
+        world.turnCharacter('d');
+    }
+
     // world.moveCharacter()
 })
 
