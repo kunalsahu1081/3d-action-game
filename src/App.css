@@ -1,0 +1,16 @@
+.canvasContainer {
+    width: 100vw;
+    height: 100vh;
+    height: 100vh;
+    background:  rgba(0,212,255,1) ;
+}
+
+.canvasElement {
+    background: rgba(241, 235, 235, 0.1);
+    height: 90vh !important;
+    width: 90vw !important;
+    position: absolute !important;
+    border-radius: 20px;
+    top: 5%;
+    left: 5%;
+}
