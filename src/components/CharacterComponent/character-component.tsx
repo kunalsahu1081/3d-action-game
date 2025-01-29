@@ -1,6 +1,7 @@
 import * as THREE from "three";
 import PrismComponent from "../PrismComponent/PrismComponent";
 import FrontCurve, { SideCurve } from "../frontCurve/front-curve";
+import TurretComponent from "../turretComponent/turret-component";
 
 const CharacterComponent = () => {
     const texture = new THREE.TextureLoader().load(
@@ -220,42 +221,62 @@ const CharacterComponent = () => {
                     <meshStandardMaterial {...material_properties_2} />
                 </mesh>
 
-                <mesh
-                    position={[0.3, 0.3, -0.1]}
-                    rotation={[Math.PI / 2, 0, 0]}
-                >
-                    <FrontCurve />
-                    <meshStandardMaterial {...material_properties_3} />
+                <mesh position={[0, 0, -0.05]}>
+                    <mesh
+                        position={[0.3, 0.3, -0.1]}
+                        rotation={[Math.PI / 2, 0, 0]}
+                    >
+                        <FrontCurve />
+                        <meshStandardMaterial {...material_properties_3} />
+                    </mesh>
+
+                    <mesh
+                        position={[-0.2, -0.3, -0.1]}
+                        rotation={[-Math.PI / 2, 0, Math.PI]}
+                    >
+                        <FrontCurve />
+                        <meshStandardMaterial {...material_properties_3} />
+                    </mesh>
+
+                    <mesh
+                        position={[-0.15, -0.35, -0.1]}
+                        rotation={[-Math.PI / 2, 0, Math.PI]}
+                    >
+                        <SideCurve />
+                        <meshStandardMaterial {...material_properties_2} />
+                    </mesh>
+
+                    <mesh
+                        position={[-0.15, 0.25, -0.1]}
+                        rotation={[-Math.PI / 2, 0, Math.PI]}
+                    >
+                        <SideCurve />
+                        <meshStandardMaterial {...material_properties_2} />
+                    </mesh>
+
+                    <mesh position={[0.05, 0, 0.525]} rotation={[0, 0, 0]}>
+                        <boxGeometry args={[0.5, 0.5, 0.05]} />
+                        <meshStandardMaterial {...material_properties_2} />
+                    </mesh>
+
+                    <mesh
+                        position={[0.05, -0.25, 0.4]}
+                        rotation={[Math.PI / 2, 0, 0]}
+                    >
+                        <boxGeometry args={[0.5, 0.2, 0.05]} />
+                        <meshStandardMaterial {...material_properties_3} />
+                    </mesh>
+
+                    <mesh
+                        position={[0.05, 0.25, 0.4]}
+                        rotation={[Math.PI / 2, 0, 0]}
+                    >
+                        <boxGeometry args={[0.5, 0.2, 0.05]} />
+                        <meshStandardMaterial {...material_properties_3} />
+                    </mesh>
                 </mesh>
 
-                <mesh
-                    position={[-0.2, -0.3, -0.1]}
-                    rotation={[-Math.PI / 2, 0, Math.PI]}
-                >
-                    <FrontCurve />
-                    <meshStandardMaterial {...material_properties_3} />
-                </mesh>
-
-                <mesh
-                    position={[-0.15, -0.35, -0.1]}
-                    rotation={[-Math.PI / 2, 0, Math.PI]}
-                >
-                    <SideCurve />
-                    <meshStandardMaterial {...material_properties_2} />
-                </mesh>
-
-                <mesh
-                    position={[-0.15, 0.25, -0.1]}
-                    rotation={[-Math.PI / 2, 0, Math.PI]}
-                >
-                    <SideCurve />
-                    <meshStandardMaterial {...material_properties_2} />
-                </mesh>
-
-                <mesh position={[0.05, 0, 0.525]} rotation={[0, 0, 0]}>
-                    <boxGeometry args={[0.5, 0.5, 0.05]} />
-                    <meshStandardMaterial {...material_properties_2} />
-                </mesh>
+                <TurretComponent />
 
                 {/* <meshStandardMaterial {...material_properties} /> */}
             </mesh>
