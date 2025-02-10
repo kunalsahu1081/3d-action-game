@@ -3,7 +3,15 @@ import PrismComponent from "../PrismComponent/PrismComponent";
 import FrontCurve, { SideCurve } from "../frontCurve/front-curve";
 import TurretComponent from "../turretComponent/turret-component";
 
-const CharacterComponent = () => {
+import { useEffect, useRef, useState } from "react";
+import { useFrame } from "@react-three/fiber";
+
+const CharacterComponent = ({ targetRef }: any) => {
+    const caRef = useRef<any>();
+    const [prev_angle, set_prev_angle] = useState(0);
+    const [rotate_left, set_rotate_left] = useState(false);
+    const [rotate_right, set_rotate_right] = useState(false);
+
     const texture = new THREE.TextureLoader().load(
         "src/assets/character-texture.png",
         function (tx: any) {
@@ -35,6 +43,51 @@ const CharacterComponent = () => {
         metalness: 0.75,
         fog: true,
     };
+
+    useFrame(({ clock }) => {
+        if (rotate_left) {
+            if (prev_angle - caRef.current.rotation.z >= Math.PI / 2) {
+                caRef.current.rotation.z = prev_angle - Math.PI / 2;
+
+                set_rotate_left(false);
+                set_prev_angle(caRef.current.rotation.z);
+            } else {
+                caRef.current.rotation.z -= 0.01;
+            }
+        }
+
+        if (rotate_right) {
+            if (caRef.current.rotation.z - prev_angle >= Math.PI / 2) {
+                caRef.current.rotation.z = prev_angle + Math.PI / 2;
+
+                set_rotate_right(false);
+                set_prev_angle(caRef.current.rotation.z);
+            } else {
+                caRef.current.rotation.z += 0.01;
+            }
+        }
+    });
+
+    const handleClickEvent = (event: any) => {
+        if (event.keyCode == 39) {
+            set_rotate_right(false);
+            // set_prev_angle(caRef.current.rotation.z);
+            set_rotate_left(true);
+        }
+        if (event.keyCode == 37) {
+            set_rotate_left(false);
+            // set_prev_angle(caRef.current.rotation.z);
+            set_rotate_right(true);
+        }
+    };
+
+    useEffect(() => {
+        window.addEventListener("keydown", handleClickEvent);
+
+        return () => {
+            window.removeEventListener("keydown", handleClickEvent);
+        };
+    }, [rotate_left, rotate_right]);
 
     return (
         <>
@@ -221,7 +274,7 @@ const CharacterComponent = () => {
                     <meshStandardMaterial {...material_properties_2} />
                 </mesh>
 
-                <mesh position={[0, 0, -0.05]}>
+                <mesh ref={caRef} rotation={[0, 0, 0]} position={[0, 0, -0.05]}>
                     <mesh
                         position={[0.3, 0.3, -0.1]}
                         rotation={[Math.PI / 2, 0, 0]}
@@ -274,9 +327,9 @@ const CharacterComponent = () => {
                         <boxGeometry args={[0.5, 0.2, 0.05]} />
                         <meshStandardMaterial {...material_properties_3} />
                     </mesh>
-                </mesh>
 
-                <TurretComponent />
+                    <TurretComponent targetRef={targetRef} />
+                </mesh>
 
                 {/* <meshStandardMaterial {...material_properties} /> */}
             </mesh>

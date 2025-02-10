@@ -1,6 +1,7 @@
 import * as THREE from "three";
 import { useEffect, useRef, useState, Suspense } from "react";
 import { useFrame } from "@react-three/fiber";
+import { useTimer } from "use-timer";
 import {
     Bloom,
     DepthOfField,
@@ -259,9 +260,7 @@ let options = {
 const width = window.innerWidth,
     height = window.innerHeight;
 
-const FireBall = () => {
-    const fireRef = useRef<any>();
-
+const FireBall = ({ ballRef }: any) => {
     const [material, set_material] = useState<any>({});
 
     const [material2, set_material2] = useState<any>({});
@@ -274,11 +273,8 @@ const FireBall = () => {
 
     useEffect(() => {
         setMaterials();
+        animatBloom(0);
     }, []);
-
-    useFrame(({ clock }) => {
-        animatBloom(clock);
-    });
 
     function updateDraw(deltaTime = 100) {
         if (!material?.uniforms) return;
@@ -295,8 +291,9 @@ const FireBall = () => {
         material.uniforms.color0.value = new THREE.Vector3(...options.color0);
     }
 
-    function animatBloom(deltaTime) {
+    function animatBloom(deltaTime = 100) {
         requestAnimationFrame(animatBloom);
+
         updateDraw(deltaTime);
 
         // console.log(materialr1?.current?.uniforms);
@@ -402,7 +399,12 @@ const FireBall = () => {
 
     return (
         <>
-            <mesh scale={[0.1, 0.1, 0.1]} ref={fireRef}>
+            <mesh
+                rotation={[0, Math.PI / 2, 0]}
+                scale={[0.08, 0.08, 0.08]}
+                position={[0, 0, 0.1]}
+                ref={ballRef}
+            >
                 <mesh scale={[0.78, 0.78, 0.78]} position={[1, 0, 0]}>
                     <sphereGeometry args={[1, 30, 30]} />
 
@@ -453,11 +455,11 @@ const FireBall = () => {
                 </mesh>
             </mesh>
 
-            <Suspense fallback={null}>
+            {/* <Suspense fallback={null}>
                 <EffectComposer>
                     <Bloom radius={0.1} intensity={1000} />
                 </EffectComposer>
-            </Suspense>
+            </Suspense> */}
         </>
     );
 };

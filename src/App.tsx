@@ -8,9 +8,11 @@ import CharacterComponent from "./components/CharacterComponent/character-compon
 
 function App() {
     const ref = useRef<any>();
+    const targetRef = useRef<any>();
 
     const [row_count] = useState(21);
     const [col_count] = useState(21);
+    const [turn, set_turn] = useState<boolean>();
 
     useEffect(() => {
         const gui = new GUI();
@@ -31,6 +33,12 @@ function App() {
     return (
         <>
             <div id="canvas-container" className="canvasContainer">
+                <button
+                    onClick={() => {
+                        set_turn((prev) => !prev);
+                    }}
+                />
+
                 <Canvas className="canvasElement">
                     <CameraController />
 
@@ -55,7 +63,16 @@ function App() {
                             thickness={0.5}
                         />
 
-                        <CharacterComponent />
+                        <CharacterComponent targetRef={targetRef} />
+
+                        <mesh
+                            ref={targetRef}
+                            rotation={[0, 0, 0]}
+                            position={[5, 0, 1]}
+                        >
+                            <boxGeometry args={[1, 1, 1]} />
+                            <meshStandardMaterial />
+                        </mesh>
                     </mesh>
                 </Canvas>
             </div>

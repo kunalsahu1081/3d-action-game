@@ -1,7 +1,12 @@
 import * as THREE from "three";
 import FireBall from "../fireball/fireball";
+import { useRef, useState, useEffect } from "react";
+import { useFrame } from "@react-three/fiber";
 
-const TurretComponent = () => {
+const TurretComponent = ({ targetRef }: any) => {
+    const [moveBall, setMoveBall] = useState(false);
+    const ballRef = useRef<any>();
+
     const texture = new THREE.TextureLoader().load(
         "src/assets/character-texture.png",
         function (tx: any) {
@@ -36,12 +41,48 @@ const TurretComponent = () => {
     settings.depth = 1.5;
     settings.bevelEnabled = false;
 
+    useFrame(({ clock }) => {
+        if (moveBall && ballRef.current.position.z > -10) {
+            ballRef.current.position.z -= 0.5;
+
+            console.log(ballRef.current.position.z);
+
+            if (
+                Math.abs(
+                    -ballRef.current.position.z - targetRef.current.position.x
+                ) < 1
+            ) {
+                ballRef.current.position.z = 0;
+                ballRef.current.rotation.z = 0;
+                setMoveBall(false);
+            }
+        } else if (moveBall) {
+            ballRef.current.position.z = 0;
+            ballRef.current.rotation.z = 0;
+            setMoveBall(false);
+        }
+    });
+
+    const handleClickEvent = (event: any) => {
+        if (event.keyCode == 13) {
+            setMoveBall(true);
+        }
+    };
+
+    useEffect(() => {
+        window.addEventListener("keydown", handleClickEvent);
+
+        return () => {
+            window.removeEventListener("keydown", handleClickEvent);
+        };
+    }, []);
+
     return (
-        <mesh position={[-1.5, 0, 0.45]} rotation={[0, Math.PI / 2 + 0.1, 0]}>
+        <mesh position={[-1.5, 0, 0.5]} rotation={[0, Math.PI / 2 + 0.1, 0]}>
             <extrudeGeometry args={[cShape, settings]} />
             <meshStandardMaterial {...material_properties_2} />
 
-            <FireBall />
+            <FireBall ballRef={ballRef} />
         </mesh>
     );
 };
